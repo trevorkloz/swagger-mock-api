@@ -3,6 +3,9 @@
 Creates useful mock values based on a swagger.yaml file.
 Reloads file on every api call so that changes can be seen without restarting the server.
 
+Forkes the Swagger Mock-Api from stuartmclean/swagger-mock-api and added support for "post"-methods and better path matching 
+("path/with/slashes"). Also differs in following references ($ref) in response definitions.
+
 ### Quickstart
 
 run ```npm install```
@@ -15,7 +18,7 @@ optional environment params:
 
 ### Docker
 
-get image: ```docker pull stuartmclean/swagger-mock-api```
+get image: ```docker pull trevorkloz/swagger-mock-api```
 
 sample docker command, accessible on port 10010 and reading swagger file from:
 /path/to/swagger/dir/swagger.yaml
@@ -23,10 +26,8 @@ sample docker command, accessible on port 10010 and reading swagger file from:
 ```
 docker run -d \
     -p 10010:8080 \
-    stuartmclean/swagger-mock-api \
+    trevorkloz/swagger-mock-api \
     -f /path/to/swagger/dir:/app/swagger \
-    --delay 1000 \
-    --status 418 
 ```
 
 ### Dev
