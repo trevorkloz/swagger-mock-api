@@ -6,7 +6,7 @@ info:
 
 host: localhost:10010 # during dev, should point to your local machine
 
-basePath: /
+basePath: /api
 
 schemes:
   - http

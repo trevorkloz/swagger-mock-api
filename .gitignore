@@ -2,6 +2,7 @@
 /nbproject
 .idea
 *.iml
+.project
 
 #Mac
 .DS_Store
