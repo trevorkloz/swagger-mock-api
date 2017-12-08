@@ -38,7 +38,7 @@ app.post('/', function (req, res) {
 
 app.get('/_structure', function (req, res) {
     setTimeout(function () {
-        res.status(status);
+        res.status(200);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(mockApi.getStructure(filePath)));
     }, delay);
@@ -46,17 +46,27 @@ app.get('/_structure', function (req, res) {
 
 app.get(/^\/(.+)/, function (req, res) {
     setTimeout(function () {
+    	
+    		var method = 'get';
+    		var object = mockApi.getPathObject(req.params[0], method, filePath);
+    		var status = mockApi.getResponseCode(req.params[0], method, filePath);
+    		
         res.status(status);
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(mockApi.getPathObject(req.params[0], 'get',  filePath)));
+        res.send(JSON.stringify(object));
     }, delay);
 });
 
 app.post(/^\/(.+)/, function (req, res) {
     setTimeout(function () {
+    	
+    		var method = 'post';
+		var object = mockApi.getPathObject(req.params[0], method, filePath);
+		var status = mockApi.getResponseCode(req.params[0], method, filePath);
+		
         res.status(status);
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(mockApi.getPathObject(req.params[0], 'post', filePath)));
+        res.send(JSON.stringify(object));
     }, delay);
 });
 
