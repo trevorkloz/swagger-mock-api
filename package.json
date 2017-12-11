@@ -9,6 +9,7 @@
   "author": "info@stuartmclean.net",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "commander": "^2.9.0",
     "express": "^4.14.0",
     "js-yaml": "^3.7.0"

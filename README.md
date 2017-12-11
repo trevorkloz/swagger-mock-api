@@ -3,11 +3,22 @@
 Creates useful mock values based on a swagger.yaml file.
 Reloads file on every api call so that changes can be seen without restarting the server.
 
-Forkes the Swagger Mock-Api from stuartmclean/swagger-mock-api and added support for 
+Forkes the Swagger Mock-Api from *stuartmclean/swagger-mock-api* and added support for 
 * "post"-methods
 * better path matching in general ("path/with/slashes")
 * basePath matching
 * it also differs in following references ($ref) in response definitions.
+* per default values will be generated
+* extension (*x-mock-api*) to respond a json-file content, when a header key matches
+
+```
+x-mock-api:
+   x-mock-api-profiles:
+    - file: response_mock_1.json
+      header: 
+        key: testId
+        value: xyz
+```
 
 ### Quickstart
 

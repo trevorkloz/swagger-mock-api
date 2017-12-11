@@ -4,7 +4,7 @@ info:
   description: Test
   version: "1.0.0"
 
-host: localhost:10010 # during dev, should point to your local machine
+host: localhost:8080 # during dev, should point to your local machine
 
 basePath: /api
 
@@ -12,6 +12,13 @@ schemes:
   - http
   - https
 
+x-mock-api:
+   x-mock-api-profiles:
+    - file: response_mock_1.json
+      header: 
+        key: testId
+        value: xyz
+      
 produces:
   - application/json
 paths:
