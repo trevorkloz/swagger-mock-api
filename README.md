@@ -7,9 +7,11 @@ Forkes the Swagger Mock-Api from *stuartmclean/swagger-mock-api* and added suppo
 * "post"-methods
 * better path matching in general ("path/with/slashes")
 * basePath matching
-* it also differs in following references ($ref) in response definitions.
-* per default values will be generated
-* extension (*x-mock-api*) to respond a json-file content, when a header key matches
+
+Added features:
+* Following references ($ref) in response definitions.
+* Per default test values will be generated on the base of the swagger definition
+* Per extension (*x-mock-api*) it is possible to respond the content of a json-file when a header key or a body attribute matches (body/path specification follows the JSONPath syntax, see https://github.com/s3u/JSONPath)
 
 ```
 x-mock-api:
@@ -18,6 +20,10 @@ x-mock-api:
       header: 
         key: testId
         value: xyz
+    - file: response_mock_2.json
+      body: 
+        path: $.._testId
+        value: 123
 ```
 
 ### Quickstart
