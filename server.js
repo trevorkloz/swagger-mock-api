@@ -17,6 +17,11 @@ var express = require('express'),
     port = (opts.port === parseInt(opts.port, 10)) ? opts.port : 8080,
     status = 200;
 
+var jsonPath = require('jsonpath-plus');
+var bodyParser = require('body-parser')
+
+// parse application/json in Body of request
+app.use(bodyParser.json())
 
 if (!fs.existsSync(filePath)) {
     console.log(filePath + ' does not exist');
@@ -69,32 +74,69 @@ function createProfileResponse(status, req, res){
 	var xMock = doc["x-mock-api"];
 	
 	if(DEBUG)
-		console.log("x-mock-api:", xMock);
+		console.log("X-MOCK_API", "x-mock-api:", xMock);
 
 	if (xMock && xMock["x-mock-api-profiles"]) {
 
 		var profiles = xMock["x-mock-api-profiles"];
 		var headers = req["headers"];
+		var body = req.body;
 
-		if (headers) {
+		if(DEBUG) {
+			console.log("X-MOCK_API", "request-header:", headers);
+			console.log("X-MOCK_API", "request-body:", body);
+		}
+		
+		for (var i = 0; i < profiles.length; i++) {
+			var profile = profiles[i];
 			
-			if(DEBUG)
-				console.log("request-header:", headers);
+			console.log("X-MOCK_API", "scan profile at index " + i + ":", profile);
 			
-			for (var i = 0; i < profiles.length; i++) {
-				var profile = profiles[0];
+			if (headers && profile.header) {
+				
+				if(DEBUG) {
+					console.log("X-MOCK_API", "header key:", profile.header.key.toLowerCase());
+					console.log("X-MOCK_API", "profile.header.value", profile.header.value);
+				}
+									
 				if (headers[profile.header.key.toLowerCase()] == profile.header.value) {
-					res.status(status);
-					res.setHeader('Content-Type', 'application/json');
-					res.send(JSON.parse(fs.readFileSync('./swagger/'
-							+ profile.file, 'utf8')));
+					sendProfileResult(res, status, profile, fs);
+					console.log("X-MOCK_API", "header matches");
 
+					return true;
+				}
+			} 
+			if(body && profile.body) {
+				
+				var jsonPathResult = jsonPath({json: body, path: profile.body.path});
+				
+				if(jsonPathResult && jsonPathResult.length > 0){
+					// Only get the first match 
+					jsonPathResult = jsonPathResult.shift();
+				}
+				
+				if(DEBUG) {
+					console.log("X-MOCK_API", "jsonPathResult:", jsonPathResult);
+					console.log("X-MOCK_API", "profile.body.value:", profile.body.value);
+				}
+				
+				if (jsonPathResult == profile.body.value) {
+					sendProfileResult(res, status, profile, fs);
+					console.log("X-MOCK_API", "body matches");
 					return true;
 				}
 			}
 		}
 	}
+	
+	console.log("X-MOCK_API", "no profile matches");
 	return false;
+}
+
+function sendProfileResult (res, status, profile, fs) {
+	res.status(status);
+	res.setHeader('Content-Type', 'application/json');
+	res.send(JSON.parse(fs.readFileSync('./swagger/'	+ profile.file, 'utf8')));
 }
 
 function createResponse(filePath, method, req, res) {

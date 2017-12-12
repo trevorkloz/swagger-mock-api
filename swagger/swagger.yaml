@@ -12,12 +12,19 @@ schemes:
   - http
   - https
 
+# X-MOCK-API extension to respond json-files on the base of 
+# header values or json body attributes. The body/path specification follows 
+# the JSONPath syntax, see https://github.com/s3u/JSONPath
 x-mock-api:
    x-mock-api-profiles:
     - file: response_mock_1.json
       header: 
-        key: testId
+        key: _testId
         value: xyz
+    - file: response_mock_2.json
+      body:
+        path: $.._testId
+        value: 123
       
 produces:
   - application/json
